@@ -200,14 +200,14 @@ async def get_msg(userbot, sender, edit_id, msg_link, i, message):
             if chat in saved_channel_ids:
                 await app.edit_message_text(
                     message.chat.id, edit_id,
-                    "Sorry! This channel is protected by **__Team SPY__**."
+                    "Sorry! This channel is protected & forwarding isn't allowed."
                 )
                 return
             
         elif '/s/' in msg_link: # fixed story typo
             edit = await app.edit_message_text(sender, edit_id, "Story Link Dictected...")
             if userbot is None:
-                await edit.edit("Login in bot save stories...")     
+                await edit.edit("Login in into the bot for saving stories...")     
                 return
             parts = msg_link.split("/")
             chat = parts[3]
@@ -579,7 +579,7 @@ async def send_settings_message(chat_id, user_id):
         [Button.inline("Set Thumbnail", b'setthumb'), Button.inline("Remove Thumbnail", b'remthumb')],
         [Button.inline("PDF Wtmrk", b'pdfwt'), Button.inline("Video Wtmrk", b'watermark')],
         [Button.inline("Upload Method", b'uploadmethod')],  # Include the dynamic Fast DL button
-        [Button.url("Report Errors", "https://t.me/team_spy_pro")]
+        [Button.url("Report Errors", "https://t.me/Doldotby")]
     ]
 
     await gf.send_file(
@@ -633,7 +633,7 @@ async def callback_query_handler(event):
         await event.respond('Please send the photo you want to set as the thumbnail.')
     
     elif event.data == b'pdfwt':
-        await event.respond("Watermark is Pro+ Plan.. contact @kingofpatal")
+        await event.respond("Watermark is Pro+ Plan.. contact @Doldotby")
         return
 
     elif event.data == b'uploadmethod':
@@ -648,7 +648,7 @@ async def callback_query_handler(event):
             [Button.inline(f"Pyrogram v2{pyrogram_check}", b'pyrogram')],
             [Button.inline(f"SpyLib v1 ⚡{telethon_check}", b'telethon')]
         ]
-        await event.edit("Choose your preferred upload method:\n\n__**Note:** **SpyLib ⚡**, built on Telethon(base), by Team SPY still in beta.__", buttons=buttons)
+        await event.edit("Choose your preferred upload method:\n\n__**Note:** **SpyLib ⚡**, built on Telethon(base).__", buttons=buttons)
 
     elif event.data == b'pyrogram':
         save_user_upload_method(user_id, "Pyrogram")
@@ -857,7 +857,7 @@ async def handle_large_file(file, sender, edit, caption):
         if freecheck == 1:
             reply_markup = InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton("💎 Get Premium to Forward", url="https://t.me/kingofpatal")]
+                    [InlineKeyboardButton("💎 Get Premium to Forward", url="https://t.me/Doldotby")]
                 ]
             )
             await app.copy_message(
@@ -954,7 +954,7 @@ def progress_callback(done, total, user_id):
     # Format the progress bar
     completed_blocks = int(percent // 10)
     remaining_blocks = 10 - completed_blocks
-    progress_bar = "♦" * completed_blocks + "◇" * remaining_blocks
+    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
     
     # Convert done and total to MB for easier reading
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
@@ -981,16 +981,14 @@ def progress_callback(done, total, user_id):
     
     # Format the final output as needed
     final = (
-        f"╭──────────────────╮\n"
-        f"│     **__SpyLib ⚡ Uploader__**       \n"
-        f"├──────────\n"
+        f"╭─**__SpyLib ⚡ Uploader__**       \n"
+        f"├────────────────\n"
         f"│ {progress_bar}\n\n"
         f"│ **__Progress:__** {percent:.2f}%\n"
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
-        f"╰──────────────────╯\n\n"
-        f"**__Powered by Team SPY__**"
+        f"╰─**__All Set ✅__**\n\n"
     )
     
     # Update tracking variables for the user
@@ -1017,7 +1015,7 @@ def dl_progress_callback(done, total, user_id):
     # Format the progress bar
     completed_blocks = int(percent // 10)
     remaining_blocks = 10 - completed_blocks
-    progress_bar = "♦" * completed_blocks + "◇" * remaining_blocks
+    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
     
     # Convert done and total to MB for easier reading
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
@@ -1044,16 +1042,14 @@ def dl_progress_callback(done, total, user_id):
     
     # Format the final output as needed
     final = (
-        f"╭──────────────────╮\n"
-        f"│     **__SpyLib ⚡ Downloader__**       \n"
-        f"├──────────\n"
+        f"╭─**__SpyLib ⚡ Uploader__**       \n"
+        f"├────────────────\n"
         f"│ {progress_bar}\n\n"
         f"│ **__Progress:__** {percent:.2f}%\n"
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
-        f"╰──────────────────╯\n\n"
-        f"**__Powered by Team SPY__**"
+        f"╰─**__All Set ✅__**\n\n"
     )
     
     # Update tracking variables for the user
