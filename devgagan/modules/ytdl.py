@@ -108,7 +108,7 @@ async def process_audio(client, event, url, cookies_env_var=None):
         info_dict = await extract_audio_async(ydl_opts, url)
         title = info_dict.get('title', 'Extracted Audio')
  
-        await progress_message.edit("**__Editing metadata...__**")
+        await progress_message.edit("**__📝 Editing metadata...__**")
  
          
         if os.path.exists(download_path):
@@ -119,8 +119,8 @@ async def process_audio(client, event, url, cookies_env_var=None):
                 except Exception:
                     pass
                 audio_file.tags["TIT2"] = TIT2(encoding=3, text=title)
-                audio_file.tags["TPE1"] = TPE1(encoding=3, text="Team SPY")
-                audio_file.tags["COMM"] = COMM(encoding=3, lang="eng", desc="Comment", text="Processed by Team SPY")
+                audio_file.tags["TPE1"] = TPE1(encoding=3, text=" ")
+                audio_file.tags["COMM"] = COMM(encoding=3, lang="eng", desc="Comment", text="ALL Set ✅")
  
                 thumbnail_url = info_dict.get('thumbnail')
                 if thumbnail_url:
@@ -141,22 +141,22 @@ async def process_audio(client, event, url, cookies_env_var=None):
         chat_id = event.chat_id
         if os.path.exists(download_path):
             await progress_message.delete()
-            prog = await client.send_message(chat_id, "**__Starting Upload...__**")
+            prog = await client.send_message(chat_id, "**__Starting Upload...⬆️⬆️⬆️__**")
             uploaded = await fast_upload(
                 client, download_path, 
                 reply=prog, 
                 name=None,
                 progress_bar_function=lambda done, total: progress_callback(done, total, chat_id)
             )
-            await client.send_file(chat_id, uploaded, caption=f"**{title}**\n\n**__Powered by Team SPY__**")
+            await client.send_file(chat_id, uploaded, caption=f"**{title}**\n\n**__All Set ✅__**")
             if prog:
                 await prog.delete()
         else:
-            await event.reply("**__Audio file not found after extraction!__**")
+            await event.reply("**__Audio file not 🙄 found after extraction!__**")
  
     except Exception as e:
         logger.exception("Error during audio extraction or upload")
-        await event.reply(f"**__An error occurred: {e}__**")
+        await event.reply(f"**__🥶 An error occurred: {e}__**")
     finally:
         if os.path.exists(download_path):
             os.remove(download_path)
@@ -167,7 +167,7 @@ async def process_audio(client, event, url, cookies_env_var=None):
 async def handler(event):
     user_id = event.sender_id
     if user_id in ongoing_downloads:
-        await event.reply("**You already have an ongoing download. Please wait until it completes!**")
+        await event.reply("**You already have an ongoing download ⬇️. Please wait until it completes!**")
         return
  
     if len(event.message.text.split()) < 2:
@@ -185,7 +185,7 @@ async def handler(event):
         else:
             await process_audio(client, event, url)
     except Exception as e:
-        await event.reply(f"**An error occurred:** `{e}`")
+        await event.reply(f"**🥶 An error occurred:** `{e}`")
     finally:
         ongoing_downloads.pop(user_id, None)
  
@@ -220,7 +220,7 @@ async def handler(event):
  
      
     if user_id in ongoing_downloads:
-        await event.reply("**You already have an ongoing ytdlp download. Please wait until it completes!**")
+        await event.reply("**You already have an ongoing ytdlp download ⬇️. Please wait until it completes!**")
         return
  
     if len(event.message.text.split()) < 2:
@@ -266,7 +266,7 @@ def progress_callback(done, total, user_id):
      
     completed_blocks = int(percent // 10)
     remaining_blocks = 10 - completed_blocks
-    progress_bar = "♦" * completed_blocks + "◇" * remaining_blocks
+    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
  
      
     done_mb = done / (1024 * 1024)   
@@ -292,17 +292,15 @@ def progress_callback(done, total, user_id):
     remaining_time_min = remaining_time / 60
  
      
-    final = (
-        f"╭──────────────────╮\n"
-        f"│        **__Uploading...__**       \n"
-        f"├──────────\n"
+    final = (        
+        f"╭─⬆️⬆️⬆️⬆️⬆️\n"
+        f"├────────────────\n"
         f"│ {progress_bar}\n\n"
         f"│ **__Progress:__** {percent:.2f}%\n"
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__Time Remaining:__** {remaining_time_min:.2f} min\n"
-        f"╰──────────────────╯\n\n"
-        f"**__Powered by Team SPY__**"
+        f"╰─**__All Set ✅__**"\n\n"
     )
  
      
@@ -345,7 +343,7 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
         'verbose': True,
     }
     prog = None
-    progress_message = await event.reply("**__Starting download...__**")
+    progress_message = await event.reply("**__Starting download...⬇️⬇️⬇️__**")
     logger.info("Starting the download process...")
     try:
         info_dict = await fetch_video_info(url, ydl_opts, progress_message, check_duration_and_size)
@@ -353,7 +351,7 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
             return
          
         await asyncio.to_thread(download_video, url, ydl_opts)
-        title = info_dict.get('title', 'Powered by Team SPY')
+        title = info_dict.get('title', 'ALL Set ✅')
         k = video_metadata(download_path)      
         W = k['width']
         H = k['height']
@@ -382,7 +380,7 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
         chat_id = event.chat_id
         if os.path.exists(download_path):
             await progress_message.delete()
-            prog = await client.send_message(chat_id, "**__Starting Upload...__**")
+            prog = await client.send_message(chat_id, "**__Starting Upload...⬆️⬆️⬆️__**")
             uploaded = await fast_upload(
                 client, download_path,
                 reply=prog,
@@ -408,7 +406,7 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
             await event.reply("**__File not found after download. Something went wrong!__**")
     except Exception as e:
         logger.exception("An error occurred during download or upload.")
-        await event.reply(f"**__An error occurred: {e}__**")
+        await event.reply(f"**__🥶 An error occurred: {e}__**")
     finally:
          
         if os.path.exists(download_path):
