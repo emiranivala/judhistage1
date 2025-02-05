@@ -248,9 +248,8 @@ async def progress_callback(current, total, progress_message):
     f"│ {progress_bar}\n\n"
     f"│ **__Progress:__** {percent:.2f}%\n"
     f"│ **__Uploaded:__** {current_mb:.2f} MB / {total_mb:.2f} MB\n"
-    f"╰─**__All Set ✅__**"\n\n"
-        )
-
+    f"╰─**__All Set ✅__**\n\n"
+)
         last_update_time = current_time
 async def prog_bar(current, total, ud_type, message, start):
 
