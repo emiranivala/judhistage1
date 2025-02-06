@@ -301,7 +301,7 @@ def progress_callback(done, total, user_id):
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__Time Remaining:__** {remaining_time_min:.2f} min\n"
-        f"╰─**__{PRGRES_FTNOTE}__**"\n\n"
+        f"╰─**__{PRGRES_FTNOTE}__**"
     )
  
      
