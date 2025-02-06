@@ -23,6 +23,7 @@ import string
 import requests
 import logging
 import cv2
+from config import PRGRES_FTNOTE, COMPLETED_BLOCKS, REMAINING_BLOCKS
 from devgagan import sex as client
 from pyrogram import Client,filters
 from telethon import events
@@ -120,7 +121,7 @@ async def process_audio(client, event, url, cookies_env_var=None):
                     pass
                 audio_file.tags["TIT2"] = TIT2(encoding=3, text=title)
                 audio_file.tags["TPE1"] = TPE1(encoding=3, text=" ")
-                audio_file.tags["COMM"] = COMM(encoding=3, lang="eng", desc="Comment", text="ALL Set ✅")
+                audio_file.tags["COMM"] = COMM(encoding=3, lang="eng", desc="Comment", text="{PRGRES_FTNOTE}")
  
                 thumbnail_url = info_dict.get('thumbnail')
                 if thumbnail_url:
@@ -148,7 +149,7 @@ async def process_audio(client, event, url, cookies_env_var=None):
                 name=None,
                 progress_bar_function=lambda done, total: progress_callback(done, total, chat_id)
             )
-            await client.send_file(chat_id, uploaded, caption=f"**{title}**\n\n**__All Set ✅__**")
+            await client.send_file(chat_id, uploaded, caption=f"**{title}**\n\n**__{PRGRES_FTNOTE}__**")
             if prog:
                 await prog.delete()
         else:
@@ -266,7 +267,7 @@ def progress_callback(done, total, user_id):
      
     completed_blocks = int(percent // 10)
     remaining_blocks = 10 - completed_blocks
-    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
+    progress_bar = "{COMPLETED_BLOCKS}" * completed_blocks + "{REMAINING_BLOCKS}" * remaining_blocks
  
      
     done_mb = done / (1024 * 1024)   
@@ -300,7 +301,7 @@ def progress_callback(done, total, user_id):
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__Time Remaining:__** {remaining_time_min:.2f} min\n"
-        f"╰─**__All Set ✅__**"\n\n"
+        f"╰─**__{PRGRES_FTNOTE}__**"\n\n"
     )
  
      
@@ -351,7 +352,7 @@ async def process_video(client, event, url, cookies_env_var, check_duration_and_
             return
          
         await asyncio.to_thread(download_video, url, ydl_opts)
-        title = info_dict.get('title', 'ALL Set ✅')
+        title = info_dict.get('title', '{PRGRES_FTNOTE}')
         k = video_metadata(download_path)      
         W = k['width']
         H = k['height']
