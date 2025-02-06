@@ -938,48 +938,43 @@ async def is_file_size_exceeding(file_path, size_limit):
 user_progress = {}
 
 def progress_callback(done, total, user_id):
-    # Check if this user already has progress tracking
     if user_id not in user_progress:
         user_progress[user_id] = {
             'previous_done': 0,
             'previous_time': time.time()
         }
-    
-    # Retrieve the user's tracking data
+
     user_data = user_progress[user_id]
-    
-    # Calculate the percentage of progress
+
     percent = (done / total) * 100
+    total_blocks = 20  # Number of blocks in the progress bar
+    completed_blocks = int((percent / 100) * total_blocks)
+    fractional_block = (percent / 100) * total_blocks - completed_blocks
     
-    # Format the progress bar
-    completed_blocks = int(percent // 10)
-    remaining_blocks = 10 - completed_blocks
-    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
-    
-    # Convert done and total to MB for easier reading
+    if fractional_block > 0 and completed_blocks < total_blocks:
+        progress_bar = "✅" * completed_blocks + "🟨" + "🟥" * (total_blocks - completed_blocks - 1)
+    else:
+        progress_bar = "✅" * completed_blocks + "🟥" * (total_blocks - completed_blocks)
+
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
-    
-    # Calculate the upload speed (in bytes per second)
+
     speed = done - user_data['previous_done']
     elapsed_time = time.time() - user_data['previous_time']
-    
+
     if elapsed_time > 0:
         speed_bps = speed / elapsed_time  # Speed in bytes per second
         speed_mbps = (speed_bps * 8) / (1024 * 1024)  # Speed in Mbps
     else:
         speed_mbps = 0
-    
-    # Estimated time remaining (in seconds)
+
     if speed_bps > 0:
         remaining_time = (total - done) / speed_bps
     else:
         remaining_time = 0
-    
-    # Convert remaining time to minutes
+
     remaining_time_min = remaining_time / 60
-    
-    # Format the final output as needed
+
     final = (
         f"╭─**__SpyLib ⚡ Uploader__**       \n"
         f"├────────────────\n"
@@ -990,57 +985,51 @@ def progress_callback(done, total, user_id):
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
         f"╰─**__All Set ✅__**\n\n"
     )
-    
-    # Update tracking variables for the user
+
     user_data['previous_done'] = done
     user_data['previous_time'] = time.time()
-    
+
     return final
 
 
 def dl_progress_callback(done, total, user_id):
-    # Check if this user already has progress tracking
     if user_id not in user_progress:
         user_progress[user_id] = {
             'previous_done': 0,
             'previous_time': time.time()
         }
-    
-    # Retrieve the user's tracking data
+
     user_data = user_progress[user_id]
-    
-    # Calculate the percentage of progress
+
     percent = (done / total) * 100
+    total_blocks = 20  # Number of blocks in the progress bar
+    completed_blocks = int((percent / 100) * total_blocks)
+    fractional_block = (percent / 100) * total_blocks - completed_blocks
     
-    # Format the progress bar
-    completed_blocks = int(percent // 10)
-    remaining_blocks = 10 - completed_blocks
-    progress_bar = "✅" * completed_blocks + "🟥" * remaining_blocks
-    
-    # Convert done and total to MB for easier reading
+    if fractional_block > 0 and completed_blocks < total_blocks:
+        progress_bar = "✅" * completed_blocks + "🟨" + "🟥" * (total_blocks - completed_blocks - 1)
+    else:
+        progress_bar = "✅" * completed_blocks + "🟥" * (total_blocks - completed_blocks)
+
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
-    
-    # Calculate the upload speed (in bytes per second)
+
     speed = done - user_data['previous_done']
     elapsed_time = time.time() - user_data['previous_time']
-    
+
     if elapsed_time > 0:
         speed_bps = speed / elapsed_time  # Speed in bytes per second
         speed_mbps = (speed_bps * 8) / (1024 * 1024)  # Speed in Mbps
     else:
         speed_mbps = 0
-    
-    # Estimated time remaining (in seconds)
+
     if speed_bps > 0:
         remaining_time = (total - done) / speed_bps
     else:
         remaining_time = 0
-    
-    # Convert remaining time to minutes
+
     remaining_time_min = remaining_time / 60
-    
-    # Format the final output as needed
+
     final = (
         f"╭─**__SpyLib ⚡ Uploader__**       \n"
         f"├────────────────\n"
@@ -1051,9 +1040,8 @@ def dl_progress_callback(done, total, user_id):
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
         f"╰─**__All Set ✅__**\n\n"
     )
-    
-    # Update tracking variables for the user
+
     user_data['previous_done'] = done
     user_data['previous_time'] = time.time()
-    
+
     return final
