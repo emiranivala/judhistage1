@@ -3,6 +3,7 @@
 
 from os import getenv
 
+#Required Variables 
 API_ID = int(getenv("API_ID", ""))
 API_HASH = getenv("API_HASH", "")
 BOT_TOKEN = getenv("BOT_TOKEN", "")
@@ -12,8 +13,19 @@ LOG_GROUP = getenv("LOG_GROUP", "")
 CHANNEL_ID = int(getenv("CHANNEL_ID", ""))
 FREEMIUM_LIMIT = int(getenv("FREEMIUM_LIMIT", "0"))
 PREMIUM_LIMIT = int(getenv("PREMIUM_LIMIT", "500"))
+
+#Additional Configuration Options:
 WEBSITE_URL = getenv("WEBSITE_URL", "upshrink.com")
 AD_API = getenv("AD_API", "52b4a2cf4687d81e7d3f8f2b7bc2943f618e78cb")
 STRING = getenv("STRING", None)
 YT_COOKIES = getenv("YT_COOKIES", None)
 INSTA_COOKIES = getenv("INSTA_COOKIES", None)
+
+#Fancy edits
+COMPLETED_BLOCKS = getenv("COMPLETED_BLOCKS", "✅") #Replace ✅ with any other single alphabet or emoji
+REMAINING_BLOCKS = getenv("REMAINING_BLOCKS", "🟥") #Replace 🟥 with any other single alphabet or emoji
+PRGRES_FTNOTE = getenv("PRGRES_FTNOTE", "All Set ✅") #Replace All set ✅ with your own tag line
+
+#Button edits 
+OWNER_USERNAME = getenv("OWNER_USERNAME", "Doldotby") #Replace with your own tg username without @
+CHANNEL_USERNAME = getenv("CHANNEL_USERNAME","+rsngXN2zMJA5NTBl") #Replace value after "https://t.me/" of your channel/group link if private channel/group or value after "@" if public channel
