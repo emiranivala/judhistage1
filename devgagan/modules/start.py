@@ -14,7 +14,7 @@
 
 from pyrogram import filters
 from devgagan import app
-from config import OWNER_ID
+from config import OWNER_ID, OWNER_USERNAME, PRGRES_FTNOTE
 from devgagan.core.func import subscribe
 import asyncio
 from devgagan.core.func import *
