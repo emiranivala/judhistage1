@@ -52,11 +52,10 @@
       "required": false
     },
     "AD_API": {
-      "description": "Batch size for premium users",
+      "description": "Advertise shortener website api",
       "value": "52b4a2cf4687d81e7d3f8f2b7bc2943f618e78cb",
       "required": false
-    },
-    
+    },    
     "SUDO_USERS": {
       "description": "Other Admins' IDs (optional)",
       "value": "",
@@ -70,8 +69,32 @@
     "LOG_GROUP": {
       "description": "Enter Log Channel/Group ID (-100) and make bot admin there",
       "value": "log_group_id_here",
-      "required": true
-    }
+      "required": true    
+    },
+    "PRGRES_FTNOTE": {
+      "description": "Progress footer note",
+      "value": "All Set ✅",
+      "required": false
+    },
+    "REMAINING_BLOCKS": {
+      "description": "Caracter of remaining blocks",
+      "value": "🟥",
+      "required": false
+    },
+    "COMPLETED_BLOCKS": {
+      "description": "Caracter of remaining blocks",
+      "value": "✅",
+      "required": false
+    },
+    "OWNER_USERNAME": {
+      "description": "owner user name without @ . Value for contact button",
+      "value": "Doldotby",
+      "required": false
+    },
+    "CHANNEL_USERNAME": {
+      "description": "value after https://t.me/ of your channel/group link if private channel/group or value after @ if public channel/group",
+      "value": "✅",
+      "required": false
   },
   "buildpacks": [
     { "url": "heroku/python" },
