@@ -17,6 +17,13 @@ from pyrogram import filters
 from config import OWNER_ID
 from devgagan import app
 from devgagan.core.mongo.users_db import get_users
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from datetime import datetime, timedelta
+import re
+
+# Initialize the scheduler
+scheduler = AsyncIOScheduler()
+scheduler.start()
 
 async def send_msg(user_id, message):
     try:
@@ -25,6 +32,7 @@ async def send_msg(user_id, message):
             await x.pin()
         except Exception:
             await x.pin(both_sides=True)
+        return x
     except FloodWait as e:
         await asyncio.sleep(e.x)
         return send_msg(user_id, message)
@@ -37,12 +45,37 @@ async def send_msg(user_id, message):
     except Exception:
         return 500, f"{user_id} : {traceback.format_exc()}\n"
 
+def parse_time_duration(command):
+    match = re.search(r'(\d+)(min|hour|hrs|days)', command)
+    if not match:
+        return None
+    value, unit = match.groups()
+    value = int(value)
+    if unit == 'min':
+        return timedelta(minutes=value)
+    elif unit in ['hour', 'hrs']:
+        return timedelta(hours=value)
+    elif unit == 'days':
+        return timedelta(days=value)
+    return None
+
+async def schedule_delete(message, delay):
+    await asyncio.sleep(delay.total_seconds())
+    await message.delete()
 
 @app.on_message(filters.command("gcast") & filters.user(OWNER_ID))
 async def broadcast(_, message):
     if not message.reply_to_message:
         await message.reply_text("ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ ɪᴛ.")
-        return    
+        return
+    
+    # Parse the time duration from the command
+    command = message.text
+    delay = parse_time_duration(command)
+    if not delay:
+        await message.reply_text("Invalid time format. Use /gcast <duration> (e.g., 5min, 1hour, 24hrs).")
+        return
+    
     exmsg = await message.reply_text("sᴛᴀʀᴛᴇᴅ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ!")
     all_users = (await get_users()) or {}
     done_users = 0
@@ -50,24 +83,25 @@ async def broadcast(_, message):
     
     for user in all_users:
         try:
-            await send_msg(user, message.reply_to_message)
+            sent_message = await send_msg(user, message.reply_to_message)
             done_users += 1
             await asyncio.sleep(0.1)
+            
+            # Schedule message deletion
+            if isinstance(sent_message, Message):
+                scheduler.add_job(schedule_delete, 'date', run_date=datetime.now() + delay, args=[sent_message])
+                
         except Exception:
-            pass
             failed_users += 1
+    
     if failed_users == 0:
         await exmsg.edit_text(
             f"**sᴜᴄᴄᴇssғᴜʟʟʏ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ ✅**\n\n**sᴇɴᴛ ᴍᴇssᴀɢᴇ ᴛᴏ** `{done_users}` **ᴜsᴇʀs**",
         )
     else:
         await exmsg.edit_text(
-            f"**sᴜᴄᴄᴇssғᴜʟʟʏ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ ✅**\n\n**sᴇɴᴛ ᴍᴇssᴀɢᴇ ᴛᴏ** `{done_users}` **ᴜsᴇʀs**\n\n**ɴᴏᴛᴇ:-** `ᴅᴜᴇ ᴛᴏ sᴏᴍᴇ ɪssᴜᴇ ᴄᴀɴ'ᴛ ᴀʙʟᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ` `{failed_users}` **ᴜsᴇʀs**",
+            f"**sᴜᴄᴄᴇssғᴜʟʟʏ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ ✅**\n\n**sᴇɴᴛ ᴍᴇssᴀɢᴇ ᴛᴏ** `{done_users}` **ᴜsᴇʀs**\n\n**ɴᴏᴛᴇ:-** `ᴅᴜᴇ ᴛᴏ sᴏᴍᴇ [...]
         )
-
-
-
-
 
 @app.on_message(filters.command("acast") & filters.user(OWNER_ID))
 async def announced(_, message):
@@ -81,8 +115,13 @@ async def announced(_, message):
   
     for user in users:
       try:
-        await _.forward_messages(chat_id=int(user), from_chat_id=message.chat.id, message_ids=to_send)
+        sent_message = await _.forward_messages(chat_id=int(user), from_chat_id=message.chat.id, message_ids=to_send)
         await asyncio.sleep(1)
+        
+        # Schedule message deletion
+        if isinstance(sent_message, Message):
+            scheduler.add_job(schedule_delete, 'date', run_date=datetime.now() + delay, args=[sent_message])
+            
       except Exception as e:
         failed_user += 1
           
@@ -92,9 +131,5 @@ async def announced(_, message):
         )
     else:
         await exmsg.edit_text(
-            f"**sᴜᴄᴄᴇssғᴜʟʟʏ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ ✅**\n\n**sᴇɴᴛ ᴍᴇssᴀɢᴇ ᴛᴏ** `{done_users}` **ᴜsᴇʀs**\n\n**ɴᴏᴛᴇ:-** `ᴅᴜᴇ ᴛᴏ sᴏᴍᴇ ɪssᴜᴇ ᴄᴀɴ'ᴛ ᴀʙʟᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ` `{failed_users}` **ᴜsᴇʀs**",
+            f"**sᴜᴄᴄᴇssғᴜʟʟʏ ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ ✅**\n\n**sᴇɴᴛ ᴍᴇssᴀɢᴇ ᴛᴏ** `{done_users}` **ᴜsᴇʀs**\n\n**ɴᴏᴛᴇ:-** `ᴅᴜᴇ ᴛᴏ sᴏᴍᴇ [...]
         )
-
-
-
-
