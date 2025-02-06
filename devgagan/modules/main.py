@@ -244,7 +244,7 @@ async def batch_link(_, message):
                     msg = await app.send_message(message.chat.id, f"Processing...")
                     await process_and_upload_link(userbot, user_id, msg.id, link, 0, message)
                     await pin_msg.edit_text(
-                        f"Batch process started ⚡\nProcessing: {i - cs + 1}/{cl}\n\n**__{PRGRES_FTNOTE}__**",
+                        f"{i - cs + 1}/{cl} Processing \nBatch process started ⚡ \n\n**__{PRGRES_FTNOTE}__**",
                         reply_markup=keyboard
                     )
                     normal_links_handled = True
@@ -270,7 +270,7 @@ async def batch_link(_, message):
                     msg = await app.send_message(message.chat.id, f"Processing...")
                     await process_and_upload_link(userbot, user_id, msg.id, link, 0, message)
                     await pin_msg.edit_text(
-                        f"Batch process started ⚡\nProcessing: {i - cs + 1}/{cl}\n\n**__{PRGRES_FTNOTE}__**",
+                        f"{i - cs + 1}/{cl} Processing \nBatch process started ⚡\n**__{PRGRES_FTNOTE}__**",
                         reply_markup=keyboard
                     )
 
