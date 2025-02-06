@@ -16,6 +16,7 @@ from time import time
 from speedtest import Speedtest
 import math
 from telethon import events
+from config import PRGRES_FTNOTE
 from devgagan import botStartTime
 from devgagan import sex as gagan
 
