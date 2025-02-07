@@ -305,6 +305,7 @@ async def progress_callback(current, total, progress_message):
             f"╰─**__{PRGRES_FTNOTE}__**\n\n"
         )
         last_update_time = current_time
+        await asyncio.sleep(1)
 
 async def prog_bar(current, total, ud_type, message, start):
     now = time.time()
