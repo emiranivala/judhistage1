@@ -989,6 +989,8 @@ def progress_callback(done, total, user_id):
     user_data['previous_done'] = done
     user_data['previous_time'] = time.time()
 
+    time.sleep(1)
+
     return final
 
 
@@ -1043,5 +1045,7 @@ def dl_progress_callback(done, total, user_id):
 
     user_data['previous_done'] = done
     user_data['previous_time'] = time.time()
+
+    time.sleep(1)
 
     return final
