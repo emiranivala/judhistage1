@@ -982,7 +982,7 @@ else:
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
-        f"╰─**__All Set ✅__**\n\n"
+        f"╰─**__{PRGRES_FTNOTE}__**\n\n"
     )
 
     user_data['previous_done'] = done
