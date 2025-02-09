@@ -16,7 +16,7 @@ PREMIUM_LIMIT = int(getenv("PREMIUM_LIMIT", "500"))
 
 #Fancy edits for personalise - Required
 COMPLETED_BLOCKS = getenv("COMPLETED_BLOCKS", "✅") #Replace ✅ with any other single alphabet or emoji
-FRACTIONAL_BLOCKS = getenv("REMAINING_BLOCKS", "🟨") #Replace 🟨 with any other single alphabet or emoji
+FRACTIONAL_BLOCKS = getenv("FRACTIONAL_BLOCKS", "🟨") #Replace 🟨 with any other single alphabet or emoji
 REMAINING_BLOCKS = getenv("REMAINING_BLOCKS", "🟥") #Replace 🟥 with any other single alphabet or emoji
 PRGRES_FTNOTE = getenv("PRGRES_FTNOTE", "All Set ✅") #Replace All set ✅ with your own tag line
 
