@@ -952,9 +952,10 @@ def progress_callback(done, total, user_id):
     fractional_block = (percent / 100) * total_blocks - completed_blocks
     
     if fractional_block > 0 and completed_blocks < total_blocks:
-    progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
-else:
-    progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
+        progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
+    else:
+        progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
+    
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
 
@@ -1008,9 +1009,9 @@ def dl_progress_callback(done, total, user_id):
     fractional_block = (percent / 100) * total_blocks - completed_blocks
     
     if fractional_block > 0 and completed_blocks < total_blocks:
-    progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
-else:
-    progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
+        progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
+    else:
+        progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
 
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
