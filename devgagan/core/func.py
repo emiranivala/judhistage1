@@ -13,7 +13,8 @@
 # ---------------------------------------------------
 
 import math
-import time, re
+import time
+import re
 from pyrogram import enums
 from config import CHANNEL_ID, OWNER_ID, OWNER_USERNAME, PRGRES_FTNOTE
 from devgagan.core.mongo.plans_db import premium_users
@@ -41,14 +42,14 @@ async def subscribe(app, message):
         try:
             user = await app.get_chat_member(update_channel, message.from_user.id)
             if user.status == "kicked":
-                await message.reply_text("You are Banned. Contact -- @{OWNER_USERNAME}")
+                await message.reply_text(f"You are Banned. Contact -- @{OWNER_USERNAME}")
                 return 1
         except UserNotParticipant:
             caption = f"Join our channel to use the bot"
             await message.reply_photo(photo="https://graph.org/file/d44f024a08ded19452152.jpg", caption=caption, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Join Now...", url=f"{url}")]]))
             return 1
         except Exception:
-            await message.reply_text("Something Went Wrong. Contact us @{OWNER_USERNAME} ...")
+            await message.reply_text(f"Something Went Wrong. Contact us @{OWNER_USERNAME} ...")
             return 1
 
 async def get_seconds(time_string):
