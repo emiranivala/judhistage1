@@ -30,7 +30,7 @@ from pyrogram.enums import MessageMediaType, ParseMode
 from devgagan.core.func import *
 from pyrogram.errors import RPCError
 from pyrogram.types import Message
-from config import MONGO_DB as MONGODB_CONNECTION_STRING, LOG_GROUP, OWNER_ID, STRING, API_ID, API_HASH
+from config import MONGO_DB as MONGODB_CONNECTION_STRING, LOG_GROUP, OWNER_ID, STRING, API_ID, API_HASH, PRGRES_FTNOTE, OWNER_USERNAME, DCUSTOM_RENAME_TAG, REMAINING_BLOCKS, FRACTIONAL_BLOCKS, COMPLETED_BLOCKS, PRGRES_FTNOTE
 from devgagan.core.mongo import db as odb
 from telethon import TelegramClient, events, Button
 from devgagantools import fast_upload
@@ -549,7 +549,7 @@ user_caption_preferences = {}
 async def set_rename_command(user_id, custom_rename_tag):
     user_rename_preferences[str(user_id)] = custom_rename_tag
 
-get_user_rename_preference = lambda user_id: user_rename_preferences.get(str(user_id), 'Team SPY')
+get_user_rename_preference = lambda user_id: user_rename_preferences.get(str(user_id), DCUSTOM_RENAME_TAG)
 
 async def set_caption_command(user_id, custom_caption):
     user_caption_preferences[str(user_id)] = custom_caption
@@ -579,7 +579,7 @@ async def send_settings_message(chat_id, user_id):
         [Button.inline("Set Thumbnail", b'setthumb'), Button.inline("Remove Thumbnail", b'remthumb')],
         [Button.inline("PDF Wtmrk", b'pdfwt'), Button.inline("Video Wtmrk", b'watermark')],
         [Button.inline("Upload Method", b'uploadmethod')],  # Include the dynamic Fast DL button
-        [Button.url("Report Errors", "https://t.me/Doldotby")]
+        [Button.url("Report Errors", f"https://t.me/{OWNER_USERNAME}")],
     ]
 
     await gf.send_file(
@@ -633,7 +633,7 @@ async def callback_query_handler(event):
         await event.respond('Please send the photo you want to set as the thumbnail.')
     
     elif event.data == b'pdfwt':
-        await event.respond("Watermark is Pro+ Plan.. contact @Doldotby")
+        await event.respond(f"Watermark is Pro+ Plan.. contact @{OWNER_USERNAME}")
         return
 
     elif event.data == b'uploadmethod':
@@ -857,7 +857,7 @@ async def handle_large_file(file, sender, edit, caption):
         if freecheck == 1:
             reply_markup = InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton("💎 Get Premium to Forward", url="https://t.me/Doldotby")]
+                    [InlineKeyboardButton("💎 Get Premium to Forward", url=f"https://t.me/{OWNER_USERNAME}")]
                 ]
             )
             await app.copy_message(
@@ -952,10 +952,9 @@ def progress_callback(done, total, user_id):
     fractional_block = (percent / 100) * total_blocks - completed_blocks
     
     if fractional_block > 0 and completed_blocks < total_blocks:
-        progress_bar = "✅" * completed_blocks + "🟨" + "🟥" * (total_blocks - completed_blocks - 1)
-    else:
-        progress_bar = "✅" * completed_blocks + "🟥" * (total_blocks - completed_blocks)
-
+    progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
+else:
+    progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
 
@@ -1009,9 +1008,9 @@ def dl_progress_callback(done, total, user_id):
     fractional_block = (percent / 100) * total_blocks - completed_blocks
     
     if fractional_block > 0 and completed_blocks < total_blocks:
-        progress_bar = "✅" * completed_blocks + "🟨" + "🟥" * (total_blocks - completed_blocks - 1)
-    else:
-        progress_bar = "✅" * completed_blocks + "🟥" * (total_blocks - completed_blocks)
+    progress_bar = COMPLETED_BLOCKS * completed_blocks + FRACTIONAL_BLOCKS + REMAINING_BLOCKS * (total_blocks - completed_blocks - 1)
+else:
+    progress_bar = COMPLETED_BLOCKS * completed_blocks + REMAINING_BLOCKS * (total_blocks - completed_blocks)
 
     done_mb = done / (1024 * 1024)  # Convert bytes to MB
     total_mb = total / (1024 * 1024)
@@ -1040,7 +1039,7 @@ def dl_progress_callback(done, total, user_id):
         f"│ **__Done:__** {done_mb:.2f} MB / {total_mb:.2f} MB\n"
         f"│ **__Speed:__** {speed_mbps:.2f} Mbps\n"
         f"│ **__ETA:__** {remaining_time_min:.2f} min\n"
-        f"╰─**__All Set ✅__**\n\n"
+        f"╰─**__{PRGRES_FTNOTE}__**\n\n"
     )
 
     user_data['previous_done'] = done
